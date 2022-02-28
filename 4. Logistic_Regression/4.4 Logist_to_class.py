@@ -1,4 +1,4 @@
-import torch 
+import torch
 import torch.nn as nn 
 import torch.nn.functional as F 
 import torch.optim as optim
@@ -30,7 +30,7 @@ class CustomDataset(torch.utils.data.Dataset):
         y = torch.FloatTensor(self.y_data[idx])
         return x,y
     
-class LogisticLinearRegression(nn.Module):
+class BinaryClassifier(nn.Module):
     def __init__(self) -> None:
         super().__init__()
         self.linear = nn.Linear(2,1)
@@ -39,15 +39,13 @@ class LogisticLinearRegression(nn.Module):
     def forward(self,x):
         return self.sigmoid(self.linear(x))
     
-
 dataset = CustomDataset()
 dataloader = DataLoader(dataset=dataset, shuffle=True, batch_size=2)
 
-model = LogisticLinearRegression()
-optimizer = optim.SGD(model.parameters(), lr = 1)
+model = BinaryClassifier()
+optimizer = optim.SGD(model.parameters(), lr=1)
 
 nb_epoch = 1000
-
 
 for epoch in range(nb_epoch+1):
     for batch_idx, sample in enumerate(dataloader):
@@ -62,18 +60,12 @@ for epoch in range(nb_epoch+1):
         optimizer.step()
         
         
-    if epoch % 200 ==0 :
-        prediction = hypothesis >= torch.FloatTensor([0.5])
-        correct_prediction = prediction.float() == y_train
-        accuracy = correct_prediction.sum().item() / len(correct_prediction)
+        if epoch %200 == 0:
+            prediction = hypothesis >= torch.FloatTensor([0.5])
+            correct_prediction = prediction.float() == y_train
+            accuracy = correct_prediction.sum().item()/len(correct_prediction)
             
-    
-        print(f'epoch : {epoch}/{nb_epoch}')
-        print(f'batch size : {batch_idx+1}/{len(dataloader)}')
-        print(f'cost : {cost:.2f}')
-        print(f'accuracy : {accuracy*100}')
-
-
-new_value = torch.FloatTensor([5,5])
-
-print(f'prediction of new value : {model.forward(new_value)}')
+            print(f'epoch : {epoch}/{nb_epoch}')
+            print(f'batch idx : {batch_idx+1}/{len(dataloader)}')
+            print(f'cost : {cost:.2f}')
+            print(f'accurcy : {accuracy*100}')

@@ -28,17 +28,7 @@ model.marameters()를 list로 뽑아보면
 첫 번째는 w
 두 번째가 b 이다.
 '''
-'''
-class MultivariateLinearRegressionModel(nn.Module):
-    def __init__(self) -> None:
-        super().__init__()
-        self.linear = nn.Linear(3,1)
-        
-    def forward(self,x):
-        return self.linear(x)
-        
-이 클래스로 model 대신 할 수 있음
-'''
+
 
 
 optimizer = optim.SGD(model.parameters(),lr=1e-5)

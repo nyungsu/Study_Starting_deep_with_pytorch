@@ -42,7 +42,6 @@ class MultivariableLinearRegression(nn.Module):
 dataset = CustomDataset()
 dataloader = DataLoader(dataset=dataset,shuffle=True,batch_size=2)
 
-
 model = MultivariableLinearRegression()
 optimizer = optim.SGD(model.parameters(), lr=1e-5)
 
