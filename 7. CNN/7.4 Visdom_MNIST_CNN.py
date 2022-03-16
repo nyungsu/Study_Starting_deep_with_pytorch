@@ -1,3 +1,6 @@
+from audioop import avg
+import visdom
+
 import torch
 import torch.nn as nn 
 import torch.nn.functional as F 
@@ -7,6 +10,16 @@ import torchvision.datasets as dsets
 import torchvision.transforms as transforms
 
 from torch.utils.data import DataLoader
+
+vis = visdom.Visdom()
+
+def loss_tracker(loss_plot, loss_value, num):
+    '''window 이름, value, x값
+        loss_value, num은 tensor'''
+    vis.line(X=num,
+             Y=loss_value,
+             win=loss_plot,
+             update='append')
 
 # cuda or cpu
 device = 'cuda' if torch.cuda.is_available() else 'cpu'     
@@ -62,7 +75,7 @@ class CNN(nn.Module):
     def forward(self,x):
         out = self.layer1(x)
         out = self.layer2(out)
-        print(out.shape)
+        
         out = out.view(out.size(0),-1)
         out = self.fc(out)
         
@@ -92,8 +105,10 @@ def train(epoch):
             avg_cost += cost/total_batch
             if batch_idx % 100 ==0:
                 print(f'epoch : {epoch}/{TRAINING_EPOCHS}')
-                print(f'batch idx : {batch_idx+1}/{total_batch}')
                 print(f'cost : {cost:.2f}')
+                print(f'avg cost : {avg_cost}')
+        loss_tracker(loss_plt, torch.Tensor([avg_cost]),
+                                torch.Tensor([epoch]))
                 
 def test():
     with torch.no_grad():
@@ -108,5 +123,8 @@ def test():
         
         print(f'accuracy : {accuracy*100}')
         
-        
+loss_plt = vis.line(Y=torch.Tensor(1).zero_(),
+                    opts=dict(title='loss_tracker',
+                              legend=['loss'],
+                              showlegend=True))       
 train(1)
