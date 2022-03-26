@@ -62,7 +62,7 @@ class CNN(nn.Module):
     def forward(self,x):
         out = self.layer1(x)
         out = self.layer2(out)
-        print(out.shape)
+        
         out = out.view(out.size(0),-1)
         out = self.fc(out)
         
@@ -79,8 +79,8 @@ def train(epoch):
     for epoch in range(TRAINING_EPOCHS+1):
         avg_cost = 0
         for batch_idx, sample in enumerate(loader_train):
-            x_train, y_train = sample
-            
+            x_train, y_train = sample     # x_train = (100,1,28,28)
+                                          # y_train = (100)
             hypothesis = model(x_train)
             
             cost = F.cross_entropy(hypothesis, y_train)
@@ -94,7 +94,6 @@ def train(epoch):
                 print(f'epoch : {epoch}/{TRAINING_EPOCHS}')
                 print(f'batch idx : {batch_idx+1}/{total_batch}')
                 print(f'cost : {cost:.2f}')
-                
 def test():
     with torch.no_grad():
         model.eval()
@@ -110,3 +109,4 @@ def test():
         
         
 train(1)
+

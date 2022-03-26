@@ -12,9 +12,8 @@ model = nn.Linear(1,1)
 '''
 nn.linear(input_dim, output_dim)
 입력되는 x의 차원과 y의 차원을 입력해주면 된다.
-hypothesis 대신 쓰는 것인듯
 
-model.marameters()를 list로 뽑아보면
+model.parameters()를 list로 뽑아보면
 두 개의 인자가 나오는데
 첫 번째는 w
 두 번째가 b 이다.

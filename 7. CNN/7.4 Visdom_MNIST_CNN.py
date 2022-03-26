@@ -1,4 +1,3 @@
-from audioop import avg
 import visdom
 
 import torch
@@ -58,6 +57,9 @@ y_test_origin = test_data.test_labels
 
 # 모델 구현
 class CNN(nn.Module):
+    '''
+    input = (batch_size,color_channel,w,h)
+    '''
     def __init__(self) -> None:
         super().__init__()
         self.layer1 = nn.Sequential(
@@ -93,7 +95,6 @@ def train(epoch):
         avg_cost = 0
         for batch_idx, sample in enumerate(loader_train):
             x_train, y_train = sample
-            
             hypothesis = model(x_train)
             
             cost = F.cross_entropy(hypothesis, y_train)
@@ -105,6 +106,7 @@ def train(epoch):
             avg_cost += cost/total_batch
             if batch_idx % 100 ==0:
                 print(f'epoch : {epoch}/{TRAINING_EPOCHS}')
+                print(f'batch index = {batch_idx}/{len(loader_train)}')
                 print(f'cost : {cost:.2f}')
                 print(f'avg cost : {avg_cost}')
         loss_tracker(loss_plt, torch.Tensor([avg_cost]),

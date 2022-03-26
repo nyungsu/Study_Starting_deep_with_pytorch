@@ -31,10 +31,12 @@ dataset = TensorDataset(x_train,y_train)
 # 데이터 셋을 정의해준다
 
 dataloader = DataLoader(dataset,shuffle=True,batch_size=2)
+'''
 # 배치사이즈는 2의 배수로,
 # cpu와 gpu의 메모리가 2의 배수이므로
 # 배치크기가 2의 배수일 때,
 # 전송 효율을 높일 수 있음
+'''
 
 model = MultivariableLinearRegression()
 
